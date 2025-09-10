@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as readline from 'readline';
 import { ParkingLot } from './classes/ParkingLot';
 
@@ -36,21 +37,40 @@ function processCommand(line: string) {
   }
 }
 
-// 🔹 Interactive shell mode
-const rl = readline.createInterface({
+
+const args = process.argv.slice(2);
+const filePath = args[0];
+
+if (filePath) {
+  // File-based input mode
+  try {
+    const commands = fs.readFileSync(filePath, 'utf-8').split('\n');
+    commands.forEach(command => {
+      if (command.trim()) {
+        processCommand(command.trim());
+      }
+    });
+  } catch (error) {
+    console.error(`Error reading file: ${filePath}`);
+    process.exit(1);
+  }
+} else {
+  // Interactive mode
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     prompt: '> '
-});
+  });
 
-console.log('Welcome to Parking Lot System. Type "exit" to quit.');
-rl.prompt();
+  rl.prompt();
 
-rl.on('line', (line) => {
+  rl.on('line', (line) => {
     if (line.trim()) {
-        processCommand(line.trim());
+      processCommand(line.trim());
     }
     rl.prompt();
-}).on('close', () => {
+  }).on('close', () => {
     process.exit(0);
-});
+  });
+}
+
