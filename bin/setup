@@ -1,0 +1,17 @@
+# This script handles dependency installation, code compilation, and testing.
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+echo "--- Installing Node.js dependencies ---"
+npm install
+
+echo "\n--- Compiling TypeScript source code ---"
+npm run build
+
+echo "\n--- Running unit tests ---"
+npm test
+
+echo "\n--- Setup complete. You can now run the application using ./bin/parking_lot--- \n--- or run ./bin/parking_lot file_inputs.txt to run against predefined commands---"
+
+
