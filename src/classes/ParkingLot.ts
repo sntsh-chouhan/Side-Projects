@@ -111,8 +111,15 @@ export class ParkingLot {
     // Finds the slot number for a specific registration number.
     // output: slot number for the car with the given registration number.
 
-    public getSlotNumberForRegistrationNumber(registrationNumber: string){
-        const slotIndex = this.slots.findIndex(car => car?.registrationNumber === registrationNumber);
-        return slotIndex !== -1 ? (slotIndex + 1).toString() : 'Slot No. not found for Registration_Number';
+    public getSlotNumberForRegistrationNumber(registrationNumber: string): string {
+        const slotIndex = this.slots.findIndex(
+        car => car?.registrationNumber === registrationNumber
+        );
+
+        if (slotIndex === -1) {
+            return 'Not found';
+        }
+
+        return (slotIndex + 1).toString();
     }
 }
