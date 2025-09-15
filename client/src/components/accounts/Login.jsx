@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 
-import { TextField, Box, Button, Typography, styled } from '@mui/material';
+import { TextField, Box, Button, Typography, styled, darkScrollbar } from '@mui/material';
 import { API } from '../../service/api.js';
+import { DataContext } from '../../context/DataProvider.jsx';
 
 
 const Component = styled(Box)`
@@ -64,10 +65,18 @@ const signupInitiateValues = {
     password: ''
 }
 
+const loginInitiateValues = {
+    username: '',
+    password: ''
+}
+
 const Login = () => {
     const [account, toggleAccount] = useState('login');
     const [signup, setSignup] = useState(signupInitiateValues);
+    const [login, setLogin] = useState(loginInitiateValues);
     const [error, showError] = useState('');
+    const {setAccount} = useContext(DataContext)
+
 
     const imageURL = 'https://www.sesta.it/wp-content/uploads/2021/03/logo-blog-sesta-trasparente.png';
 
@@ -77,6 +86,10 @@ const Login = () => {
 
     const onInputChange = (e) => {
         setSignup({...signup, [e.target.name] : e.target.value})
+    }
+
+    const onValueChange = (e) => {
+        setLogin({...login, [e.target.name] : e.target.value})
     }
 
     const signupUser = async ()=>{
@@ -89,7 +102,23 @@ const Login = () => {
         } else {
             showError('Something went wrong! please try again later');
         }
-    }    
+    }   
+    
+    const loginUser = async () => {
+        let response = API.userLogin(login);
+        console.log(login)
+        if (response.isSuccess) {
+            showError('');
+
+            sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+            sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+            
+            setAccount({username:response.data.username, name: response.data.name})
+        } else {
+            showError('Something went wrong! please try again later');
+        }
+    }
+
     return (
         <Component>
             <Box>
@@ -97,12 +126,12 @@ const Login = () => {
                 {
                     account === 'login' ?
                         <Wrapper>
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='username' label='Enter Username' />
-                            <TextField variant="standard" onChange={(e) => onInputChange(e)} name='password' label='Enter Password' />
+                            <TextField variant="standard" onChange={(e) => onValueChange(e)} name='username' label='Enter Username' />
+                            <TextField variant="standard" onChange={(e) => onValueChange(e)} name='password' label='Enter Password' />
 
                             {error && <Error>{error}</Error>}
 
-                            <LoginButton variant="contained">Login</LoginButton>
+                            <LoginButton onClick={()=>loginUser()} variant="contained">Login</LoginButton>
                             <Text style={{ textAlign: 'center' }}>OR</Text>
                             <SignupButton onClick={() => toggleSignup()} style={{ marginBottom: 50 }}>Create an account</SignupButton>
                         </Wrapper> :
