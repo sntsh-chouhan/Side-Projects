@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { TextField, Box, Button, Typography, styled, darkScrollbar } from '@mui/material';
 import { API } from '../../service/api.js';
 import { DataContext } from '../../context/DataProvider.jsx';
-
+import { useNavigate } from 'react-router-dom';
 
 const Component = styled(Box)`
     width: 400px;
@@ -70,12 +70,14 @@ const loginInitiateValues = {
     password: ''
 }
 
-const Login = () => {
+const Login = ({isUserAuthenticated}) => {
     const [account, toggleAccount] = useState('login');
     const [signup, setSignup] = useState(signupInitiateValues);
     const [login, setLogin] = useState(loginInitiateValues);
     const [error, showError] = useState('');
-    const {setAccount} = useContext(DataContext)
+    const {setAccount} = useContext(DataContext);
+
+    const navigate = useNavigate();
 
 
     const imageURL = 'https://www.sesta.it/wp-content/uploads/2021/03/logo-blog-sesta-trasparente.png';
@@ -105,15 +107,22 @@ const Login = () => {
     }   
     
     const loginUser = async () => {
-        let response = API.userLogin(login);
+        let response = await API.userLogin(login);
         console.log(login)
         if (response.isSuccess) {
             showError('');
-
+            console.log("response.isSuccess")
+            console.log(response.isSuccess)
+            
             sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
             sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
             
-            setAccount({username:response.data.username, name: response.data.name})
+            setAccount({username:response.data.username, name: response.data.name});
+
+            isUserAuthenticated(true)
+            setLogin(loginInitiateValues);
+
+            navigate('/');
         } else {
             showError('Something went wrong! please try again later');
         }
