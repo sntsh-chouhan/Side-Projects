@@ -1,22 +1,28 @@
 import axios from 'axios';
 
 import { API_NOTIFICATION_MESSAGES, SERVICE_URLS } from '../constants/config';
+import { getAccessToken } from '../utils/comman-utils';
 const API_URL = "http://localhost:8000";
 
 
 const axiosInstance = axios.create({
     baseURL: API_URL,
-    timeout: 10000, 
-    headers: {
-        "content-type": "application/json"
-    }
+    timeout: 10000
 });
 
 axiosInstance.interceptors.request.use(
-    function(config){
+    function(config) {
+        // If the data is FormData, the browser will set the Content-Type
+        // automatically with the correct boundary. We do nothing.
+        if (config.data instanceof FormData) {
+            // Let the browser handle it
+        } else {
+            // For all other requests (like typical JSON), set the header.
+            config.headers['content-type'] = 'application/json';
+        }
         return config;
     },
-    function(error){
+    function(error) {
         return Promise.reject(error);
     }
 )
@@ -104,6 +110,9 @@ for (const [key, value] of Object.entries(SERVICE_URLS)) {
             url: value.url,
             data: value.method === 'DELETE' ? '' : body,
             responseType: value.responseType,
+            headers:{
+                authorization: getAccessToken()
+            },
             onUploadProgress: function(progressEvent) {
                 if (showUploadProgress) {
                     let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);

@@ -67,7 +67,10 @@ const CreatePost = () => {
                 const data = new FormData();
                 data.append("name", file.name);
                 data.append("file", file);
-                
+                console.log("this point")
+                for (const [key, value] of data.entries()) {
+                   console.log(`${key}:`, value);
+                }
                 const response = await API.uploadFile(data);
                 post.picture = response.data;
             }
