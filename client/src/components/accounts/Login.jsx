@@ -111,8 +111,8 @@ const Login = ({isUserAuthenticated}) => {
         console.log(login)
         if (response.isSuccess) {
             showError('');
-            console.log("response.isSuccess")
-            console.log(response.isSuccess)
+            // console.log("response.isSuccess")
+            // console.log(response.isSuccess)
             
             sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
             sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);

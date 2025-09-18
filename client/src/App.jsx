@@ -7,6 +7,7 @@ import Login from './components/accounts/Login'
 import Home from './components/home/Home'
 import Header from './components/header/Header'
 import CreatePost from './components/create/CreatePost'
+import DetailView from './components/details/DetailView'
 
 const PrivateRoute = ({ isAuthenticated, ...props }) => {
   const token = sessionStorage.getItem('accessToken');
@@ -19,7 +20,7 @@ const PrivateRoute = ({ isAuthenticated, ...props }) => {
 
 
 function App() {
-  const [isAuthenticated, isUserAuthenticated] = useState(true);
+  const [isAuthenticated, isUserAuthenticated] = useState(false);
 
 
   return (
@@ -37,7 +38,10 @@ function App() {
               <Route path='/create' element={<CreatePost />} />
             </Route>
 
-            
+            <Route path='/details/:id' element={<PrivateRoute isAuthenticated={isAuthenticated} />} >
+              <Route path='/details/:id' element={<DetailView />} />
+            </Route>
+
           </Routes>
         </div>
       </BrowserRouter>
