@@ -8,7 +8,7 @@ import { response } from "express";
 
 dotenv.config();
 
-export const signupUser = async(req, res) => {
+export const singupUser = async(req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -61,3 +61,9 @@ export const loginUser = async(req, res) => {
 
 }
 
+export const logoutUser = async (request, response) => {
+    const token = request.body.token;
+    await Token.deleteOne({ token: token });
+
+    response.status(204).json({ msg: 'logout successfull' });
+}
