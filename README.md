@@ -1,1 +1,1 @@
-# Big-Blog-App
+# Side Projects to learn stuff
