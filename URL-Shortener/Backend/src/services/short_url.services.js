@@ -5,6 +5,6 @@ export const createShortUrlService = async (url) => {
     const short_url = generateNanoID(7);
     if(!short_url)throw new Error("Short URL not generated")
     
-    await saveUrl(url, "-RnZoHR")
+    await saveUrl(url, short_url)
     return short_url
 }
