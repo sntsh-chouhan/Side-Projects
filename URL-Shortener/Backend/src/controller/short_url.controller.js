@@ -1,26 +1,28 @@
-import { createShortUrlService } from "../services/short_url.services.js";
-import { getUrl } from "../dao/short_url.js";
-import wrapAsync from "../utils/tryCatchWrapper.js";
+import { getShortUrl } from "../dao/short_url.js"
+import { createShortUrlWithoutUser, createShortUrlWithUser } from "../services/short_url.services.js"
+import wrapAsync from "../utils/tryCatchWrapper.js"
 
-export const createShortUrl = wrapAsync(async (req, res, next) => {
-    const {url} = req.body
-    const short_url = await createShortUrlService(url)
-
-    res.send({
-        short_url,
-        url,
-    })
+export const createShortUrl = wrapAsync(async (req,res)=>{
+    const data = req.body
+    let shortUrl
+    if(req.user){
+        shortUrl = await createShortUrlWithUser(data.url, req.user._id, data.slug)
+    }else{  
+        shortUrl = await createShortUrlWithoutUser(data.url)
+    }
+    res.status(200).json({shortUrl : process.env.APP_URL + shortUrl})
 })
 
-export const redirectFromShortUrl = wrapAsync(async (req, res) => {
+
+export const redirectFromShortUrl = wrapAsync(async (req,res)=>{
     const {shortUrl} = req.params
-
-    console.log(shortUrl)
-
-    const url = await getUrl(shortUrl)
-
-    if(!url){
-        res.status(404).send(`url not found baba on "http://localhost:3000/api/${shortUrl}"`)
-    }
+    const url = await getShortUrl(shortUrl)
+    if(!url) throw new Error("Short URL not found")
     res.redirect(url.full_url)
+})
+
+export const createCustomShortUrl = wrapAsync(async (req,res)=>{
+    const {url,slug} = req.body
+    const shortUrl = await createShortUrlWithoutUser(url,customUrl)
+    res.status(200).json({shortUrl : process.env.APP_URL + shortUrl})
 })
