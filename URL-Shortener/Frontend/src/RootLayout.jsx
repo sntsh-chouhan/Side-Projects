@@ -1,18 +1,17 @@
-// go t0 ./RootLayout.jsx insted we are using tanstack here
-
-
-
 import React from 'react'
 import HomePage from './pages/HomePage'
 import LoginForm from './components/LoginForm'
 import AuthPage from './pages/AuthPage'
+import { Outlet } from '@tanstack/react-router'
+import Navbar from './components/NavBar'
 
-const App = () => {
+const RootLayout = () => {
   return (
     <>
-    <AuthPage/>
+      <Navbar/>
+      <Outlet/>
     </>
   )
 }
 
-export default App
+export default RootLayout

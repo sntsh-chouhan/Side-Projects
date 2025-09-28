@@ -8,7 +8,7 @@ export const register_user = wrapAsync( async (req, res) => {
     
     req.user = user
     res.cookie("accessToken" , token, cookieOptions)
-    res.status(200).json({message : "login success"})
+    res.status(200).json({user : user, message : "login success"})
 })
 
 export const login_user = wrapAsync( async (req, res) => {
@@ -17,7 +17,7 @@ export const login_user = wrapAsync( async (req, res) => {
 
     req.user = user
     res.cookie("accessToken" , token, cookieOptions)
-    res.status(200).json({message : "login success"})
+    res.status(200).json({user : user, message : "login success"})
 })
 
 

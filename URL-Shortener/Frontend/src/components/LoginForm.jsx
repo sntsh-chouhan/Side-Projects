@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { loginUser } from '../api/user.api';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../store/slice/authSlice';
 
 const LoginForm = ({ state }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const auth = useSelector((state) => state.auth);
+    const dispatch = useDispatch()
 
+    console.log(auth)
     const handleSubmit = async () => {
         setLoading(true);
         setError('');
 
         try {
             const data = await loginUser(email, password);
-            // dispatch(login(data.user))
+            dispatch(login(data.user))
             // navigate({to:"/dashboard"})
             setLoading(false);
             console.log("signin success")
