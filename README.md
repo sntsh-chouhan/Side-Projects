@@ -17,7 +17,7 @@ The goal of this repo is to **track my growth as a developer** and showcase the 
 
 ### 2. URL-shortener
 **Description:** A simple URL shortener app with user auth and redux, and other features  
-**Skills:** React, Node, MongoDB, state management, JWT-Token, Redux, Tanstack
+**Skills:** React, Node, MongoDB, state management, JWT-Token, Redux, Tanstack  
 **Directory:** [URL-shortener](https://github.com/sntsh-chouhan/Side-Projects/tree/main/URL-Shortener)
 
 
