@@ -9,7 +9,7 @@ export const createShortUrlWithoutUser = async (url) => {
 }
 
 export const createShortUrlWithUser = async (url,userId,slug=null) => {
-    const shortUrl = slug || generateNanoId(7)
+    const shortUrl = slug || generateNanoID(7)
     const exists = await getCustomShortUrl(slug)
     if(exists) throw new Error("This custom url already exists")
 

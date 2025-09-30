@@ -1,32 +1,49 @@
 import React from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/slice/authSlice';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
 
-    const userName = "santosh";
+  // Get auth state from Redux
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+  // Logout handler
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("token");
+    // Optional: navigate to home page if needed
+    navigate({to:"/"})
+  };
+
   return (
-    <nav className="bg-white border ">
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+    <nav className="bg-white border-b shadow-sm">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+
           {/* Left side - App Name */}
           <div className="flex items-center">
             <Link to="/" className="text-xl font-bold text-gray-800">
               URL Shortener
             </Link>
           </div>
-          
+
           {/* Right side - Auth buttons */}
-          <div className="flex items-center">
-            {(true) ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-700">Welcome, {userName || 'User'}</span>
+          <div className="flex items-center space-x-4">
+            {isAuthenticated ? (
+              <>
+                <span className="text-gray-700">
+                  Welcome, {user?.name || 'User'}
+                </span>
                 <button
-                //   onClick={onLogout}
+                  onClick={handleLogout}
                   className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium"
                 >
                   Logout
                 </button>
-              </div>
+              </>
             ) : (
               <Link
                 to="/auth"

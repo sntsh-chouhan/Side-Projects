@@ -7,6 +7,7 @@ import connectDB from './src/config/mongo.config.js';
 
 import short_url from './src/routes/short_url.routes.js';
 import auth_route from './src/routes/auth.routes.js';
+import user_routes from './src/routes/user.routes.js';
 import { redirectFromShortUrl } from './src/controller/short_url.controller.js';
 import { errorHandler } from './src/utils/errorHandler.js';
 import { attachUser } from "./src/utils/attachUser.js";
@@ -32,6 +33,7 @@ app.use(attachUser)
 app.use("/api/create", short_url)
 app.use("/auth", auth_route)
 app.get("/:shortUrl", redirectFromShortUrl)
+app.use("/user", user_routes)
 
 app.use(errorHandler)
 

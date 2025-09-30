@@ -36,3 +36,12 @@ export const getCurrentUser = async () => {
         throw new Error(err.response?.data?.message || "session timeout")
     }
 }
+
+export const getAllUserUrls = async () => {
+    try {
+        const { data } = await axiosInstance.post("/user/urls")
+        return data
+    } catch (err) {
+        throw new Error(err.response?.data?.message || "Empty url list")
+    }
+}
